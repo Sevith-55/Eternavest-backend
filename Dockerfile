@@ -1,18 +1,25 @@
-# Use official Python 3.8 image
-FROM python:3.8
+# Use official Python 3.8.10 image
+FROM python:3.8.10
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Set working directory
 WORKDIR /app
 
-# Copy all project files
-COPY . .
+# Copy dependency files first to cache better
+COPY requirements.txt .
 
 # Install dependencies
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Expose port (Render uses 10000+)
+# Copy the rest of the code
+COPY . .
+
+# Expose the Flask port
 EXPOSE 5000
 
-# Run the Flask app
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "index:app"]
+# Run the app
+CMD ["gunicorn", "index:app", "--bind", "0.0.0.0:5000"]
