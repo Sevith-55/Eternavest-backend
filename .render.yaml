@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: eternavest-backend
+    env: docker
+    plan: free
+    region: oregon
+    repo: https://github.com/Sevith-55/Eternavest-backend
+    branch: main
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: 5000
